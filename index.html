@@ -11,6 +11,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
+  <!-- CDN Libraries: Three.js and GSAP with ScrollTrigger for Scroll-Driven 3D Hero -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
   <!-- Stylesheet -->
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -51,21 +56,75 @@
   </header>
 
   <main>
-    <!-- Hero Section -->
-    <section class="hero-section" id="hero">
-      <div class="hero-backdrop-glow" aria-hidden="true"></div>
-      <div class="hero-content">
-        <div class="hero-badge">
-          <span class="pulse-dot" aria-hidden="true"></span>
-          <span>Annual Inter-College Cultural Celebration</span>
+    <!-- SCROLL-DRIVEN 3D HERO EXPERIENCE (400vh Track with Three.js & GSAP ScrollTrigger) -->
+    <div class="hero-scroll-track" id="hero">
+      <div class="hero-sticky-viewport" id="heroStickyViewport">
+        <!-- Three.js WebGL 3D Canvas -->
+        <canvas id="threeHeroCanvas" class="three-hero-canvas" aria-label="3D Enchanted Sacred Tree Experience"></canvas>
+        
+        <!-- WebGL Graceful Fallback Container -->
+        <div id="threeWebGlFallback" class="three-fallback hidden" aria-hidden="true">
+          <div class="fallback-glow-tree"></div>
         </div>
-        <h1 class="hero-title">
-          Where Culture Blooms in <span class="highlight-text">Enchanted Nature</span>
-        </h1>
-        <p class="hero-tagline">
-          Join thousands of creators, botanists, artists, and storytellers under the mystical glowing canopy of Greenwood University. Three days of organic art, nature photography, zero-waste music, and sustainable innovation.
-        </p>
 
+        <!-- 3D Scroll Stages Overlay -->
+        <div class="hero-3d-overlay" id="hero3dOverlay">
+          
+          <!-- Stage 1: Scroll 0-25% (Dark misty forest, College name presents, glowing seed) -->
+          <div class="hero-scroll-stage stage-1" id="stage1Intro">
+            <span class="college-sub-title" id="collegeSubTitle">[YOUR COLLEGE NAME] Presents</span>
+            <h2 class="mystic-tagline">The Awakening of the Sacred Grove</h2>
+            <div class="stage-seed-indicator">
+              <span class="seed-aura" aria-hidden="true"></span>
+              <span class="seed-caption">A glowing seed awaits your scroll...</span>
+            </div>
+          </div>
+
+          <!-- Stage 2: Scroll 25-60% (Procedural tree sprouting & growing) -->
+          <div class="hero-scroll-stage stage-2" id="stage2Growth">
+            <div class="growth-status-pill">
+              <span class="pulse-leaf" aria-hidden="true">🌱</span>
+              <span>Roots Deepen • The Ancient Tree Grows</span>
+            </div>
+            <p class="growth-subtext">Scroll to witness branches bifurcate and bioluminescent blossoms bloom</p>
+          </div>
+
+          <!-- Stage 3: Scroll 60-85% (Canopy light explosion, ECOFEST 2026 title reveal, firefly vortex) -->
+          <div class="hero-scroll-stage stage-3" id="stage3Climax">
+            <div class="climax-badge">Annual Inter-College Cultural Celebration</div>
+            <h1 class="climax-title">
+              ECOFEST <span class="year-emerald">2026</span>
+            </h1>
+            <p class="climax-subtitle">Where Culture Blooms in <span class="highlight-text">Enchanted Nature</span></p>
+            <div class="climax-info-chip">
+              <span>📅 Nov 14 – 16, 2026</span>
+              <span class="chip-sep">•</span>
+              <span>📍 The Whispering Banyan Grove</span>
+            </div>
+          </div>
+
+          <!-- Scroll Prompts & Progress Tracker -->
+          <div class="scroll-begin-prompt" id="scrollBeginPrompt">
+            <div class="scroll-mouse-glyph" aria-hidden="true">
+              <div class="scroll-wheel-dot"></div>
+            </div>
+            <span class="scroll-prompt-label">Scroll to grow tree ↓</span>
+          </div>
+
+          <!-- Floating HUD Progress Indicator -->
+          <div class="hero-hud-progress" id="heroHudProgress" aria-hidden="true">
+            <div class="hud-bar-track">
+              <div class="hud-bar-fill" id="hudProgressFill"></div>
+            </div>
+            <span class="hud-progress-val" id="hudProgressVal">0%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Festival Overview Portal (Connects 3D Hero smoothly into Main Content) -->
+    <section class="festival-portal-section" id="portalOverview">
+      <div class="section-container">
         <div class="festival-dates-card">
           <div class="date-item">
             <span class="date-icon" aria-hidden="true">📅</span>
@@ -92,13 +151,16 @@
           </div>
         </div>
 
-        <div class="hero-actions">
+        <div class="hero-actions portal-actions">
           <a href="#events" class="btn btn-primary">
             <span>Explore Events</span>
             <span class="btn-arrow" aria-hidden="true">→</span>
           </a>
           <a href="#schedule" class="btn btn-secondary">
             <span>View Day Schedule</span>
+          </a>
+          <a href="#registration" class="btn btn-primary" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);">
+            <span>Claim Free EcoPass ✨</span>
           </a>
         </div>
 
@@ -555,6 +617,30 @@
               </div>
             </div>
 
+            <!-- Live Selected Event Schedule & Venue Information Card -->
+            <div class="selected-event-details-card" id="selectedEventCard">
+              <div class="selected-card-header">
+                <span class="selected-badge">📍 Quick Register Schedule & Venue</span>
+                <span class="selected-time-pill" id="selectedCardTimePill">General All-Day Access</span>
+              </div>
+              <div class="selected-details-content">
+                <div class="selected-detail-item">
+                  <span class="detail-icon" aria-hidden="true">⏰</span>
+                  <div>
+                    <span class="detail-label-mini">Scheduled Time Slot</span>
+                    <strong class="detail-val-highlight" id="selectedEventTime">Nov 14 – 16, 2026 • All-Day Festival Pass</strong>
+                  </div>
+                </div>
+                <div class="selected-detail-item">
+                  <span class="detail-icon" aria-hidden="true">📍</span>
+                  <div>
+                    <span class="detail-label-mini">Assigned Venue & Location</span>
+                    <strong class="detail-val-highlight" id="selectedEventVenue">The Whispering Banyan Grove (Zone A)</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- Eco-Pledge Checkbox -->
             <div class="pledge-container" id="groupPledge">
               <label class="checkbox-label">
@@ -617,6 +703,16 @@
           <div class="ticket-detail">
             <span class="detail-label">REGISTERED ACTIVITY</span>
             <strong class="detail-value" id="ticketEventDisplay">EVT-01: Great Campus Seed Bomb Reforestation</strong>
+          </div>
+          <div class="ticket-grid-row">
+            <div class="ticket-detail">
+              <span class="detail-label">SCHEDULED DATE & TIME</span>
+              <strong class="detail-value highlight-slot" id="ticketTimeDisplay">Nov 14, 2026 • 10:00 AM – 12:30 PM</strong>
+            </div>
+            <div class="ticket-detail">
+              <span class="detail-label">VENUE LOCATION</span>
+              <strong class="detail-value highlight-slot" id="ticketVenueDisplay">Sunshine Grove & Nursery</strong>
+            </div>
           </div>
           <div class="ticket-grid-row">
             <div class="ticket-detail">

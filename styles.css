@@ -351,17 +351,325 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   5. Hero Section
+   5. Scroll-Driven 3D Hero Experience (Three.js & GSAP ScrollTrigger)
    -------------------------------------------------------------------------- */
-.hero-section {
+.hero-scroll-track {
   position: relative;
-  min-height: calc(100vh - 72px);
+  height: 400vh;
+  width: 100%;
+}
+
+.hero-sticky-viewport {
+  position: sticky;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 5rem 1.5rem 4rem;
+  background-color: var(--bg-deep-forest);
+}
+
+.three-hero-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.three-fallback {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(16, 185, 129, 0.25) 0%, rgba(6, 17, 10, 0.95) 75%);
+  z-index: 0;
+}
+
+.three-fallback.hidden {
+  display: none;
+}
+
+.hero-3d-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+}
+
+.hero-scroll-stage {
+  position: absolute;
+  width: 90%;
+  max-width: 900px;
+  padding: 1.5rem;
+  opacity: 0;
+  transform: translateY(28px) scale(0.96);
+  pointer-events: none;
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-scroll-stage.active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* Stage 1: College Intro */
+.college-sub-title {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2.8vw, 1.8rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--glow-gold);
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+  text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+}
+
+.mystic-tagline {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4.2vw, 3.2rem);
+  color: var(--text-main);
+  line-height: 1.25;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 25px rgba(16, 185, 129, 0.4);
+}
+
+.stage-seed-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: rgba(16, 39, 24, 0.85);
+  border: 1px solid var(--border-glass-bright);
+  padding: 0.6rem 1.4rem;
+  border-radius: var(--radius-full);
+  box-shadow: 0 0 25px rgba(16, 185, 129, 0.3);
+}
+
+.seed-aura {
+  width: 14px;
+  height: 14px;
+  background: radial-gradient(circle, #fef08a 0%, #10b981 70%);
+  border-radius: 50%;
+  box-shadow: 0 0 15px #10b981, 0 0 30px #fef08a;
+  animation: pulseGlow 1.8s infinite alternate;
+}
+
+.seed-caption {
+  font-size: 0.9rem;
+  color: var(--glow-mint);
+  font-weight: 500;
+}
+
+/* Stage 2: Tree Growth */
+.growth-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(16, 39, 24, 0.9);
+  border: 1.5px solid var(--glow-emerald);
+  padding: 0.75rem 1.8rem;
+  border-radius: var(--radius-full);
+  font-size: clamp(1rem, 2.2vw, 1.3rem);
+  font-weight: 700;
+  color: var(--glow-mint);
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.5);
+  margin-bottom: 0.8rem;
+}
+
+.pulse-leaf {
+  font-size: 1.4rem;
+  animation: leafFloat 2s ease-in-out infinite alternate;
+}
+
+.growth-subtext {
+  font-size: 1rem;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Stage 3: Climax Title */
+.climax-badge {
+  display: inline-block;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-weight: 700;
+  color: var(--glow-gold);
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid var(--glow-gold);
+  padding: 0.35rem 1rem;
+  border-radius: var(--radius-full);
+  margin-bottom: 1rem;
+  box-shadow: 0 0 15px rgba(251, 191, 36, 0.3);
+}
+
+.climax-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+  color: #f0fdf4;
+  margin-bottom: 0.8rem;
+  text-shadow: 0 0 45px rgba(16, 185, 129, 0.6), 0 0 90px rgba(6, 182, 212, 0.3);
+}
+
+.year-emerald {
+  color: var(--glow-emerald);
+  text-shadow: 0 0 35px var(--glow-emerald);
+}
+
+.climax-subtitle {
+  font-size: clamp(1.05rem, 2.2vw, 1.45rem);
+  color: var(--text-muted);
+  margin-bottom: 1.4rem;
+  font-weight: 400;
+}
+
+.climax-info-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(6, 17, 10, 0.85);
+  border: 1px solid var(--border-glass-bright);
+  padding: 0.6rem 1.4rem;
+  border-radius: var(--radius-full);
+  font-size: 0.92rem;
+  color: var(--glow-mint);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.chip-sep {
+  color: var(--border-glass-bright);
+}
+
+/* Scroll Prompt Indicator */
+.scroll-begin-prompt {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+  z-index: 10;
+}
+
+.scroll-begin-prompt.fade-out {
+  opacity: 0;
+}
+
+.scroll-mouse-glyph {
+  width: 24px;
+  height: 38px;
+  border: 2px solid var(--glow-emerald);
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  padding-top: 6px;
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.5);
+}
+
+.scroll-wheel-dot {
+  width: 4px;
+  height: 8px;
+  background: var(--glow-mint);
+  border-radius: 2px;
+  animation: mouseScroll 1.6s infinite ease-in-out;
+}
+
+@keyframes mouseScroll {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(12px); opacity: 0; }
+}
+
+.scroll-prompt-label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--glow-mint);
+  font-weight: 600;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+}
+
+/* HUD Progress Tracker */
+.hero-hud-progress {
+  position: absolute;
+  top: 90px;
+  right: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: rgba(16, 39, 24, 0.8);
+  border: 1px solid var(--border-glass-bright);
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(10px);
+  z-index: 10;
+  pointer-events: auto;
+}
+
+.hud-bar-track {
+  width: 60px;
+  height: 6px;
+  background: rgba(6, 17, 10, 0.8);
+  border-radius: var(--radius-full);
   overflow: hidden;
+}
+
+.hud-bar-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--glow-emerald), var(--glow-cyan));
+  box-shadow: 0 0 10px var(--glow-emerald);
+  transition: width 0.1s linear;
+}
+
+.hud-progress-val {
+  font-family: monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--glow-mint);
+}
+
+/* Festival Portal Section (Smooth transition from 3D Hero) */
+.festival-portal-section {
+  padding: 4rem 0 3rem;
+  background: linear-gradient(180deg, var(--bg-deep-forest) 0%, var(--bg-canopy-dark) 100%);
+  position: relative;
+  z-index: 5;
+}
+
+.portal-actions {
+  margin-top: 1.8rem;
+  margin-bottom: 3.5rem;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.2rem;
 }
 
 .hero-backdrop-glow {
@@ -458,6 +766,7 @@ body {
   align-items: center;
   gap: 0.9rem;
   text-align: left;
+}
 }
 
 .date-icon {
@@ -1597,6 +1906,99 @@ body {
   color: var(--text-main);
 }
 
+/* Live Selected Event Preview Card (Quick Register Feedback) */
+.selected-event-details-card {
+  grid-column: span 2;
+  background: rgba(16, 39, 24, 0.85);
+  border: 1.5px solid var(--glow-emerald);
+  border-radius: var(--radius-md);
+  padding: 1.2rem 1.6rem;
+  margin-bottom: 1.6rem;
+  box-shadow: 0 0 25px rgba(16, 185, 129, 0.25);
+  transition: var(--transition-smooth);
+}
+
+@media (max-width: 768px) {
+  .selected-event-details-card {
+    grid-column: span 1;
+    padding: 1rem 1.2rem;
+  }
+}
+
+.selected-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.9rem;
+  border-bottom: 1px dashed var(--border-glass-bright);
+  padding-bottom: 0.6rem;
+}
+
+.selected-badge {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--glow-mint);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.selected-time-pill {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.75rem;
+  background: rgba(6, 182, 212, 0.2);
+  border: 1px solid var(--glow-cyan);
+  color: var(--glow-cyan);
+  border-radius: var(--radius-full);
+}
+
+.selected-details-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+}
+
+@media (max-width: 600px) {
+  .selected-details-content {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+}
+
+.selected-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.selected-detail-item .detail-icon {
+  font-size: 1.5rem;
+  filter: drop-shadow(0 0 6px var(--glow-emerald));
+}
+
+.detail-label-mini {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--text-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.detail-val-highlight {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.highlight-slot {
+  color: var(--glow-mint) !important;
+  font-size: 0.88rem !important;
+  text-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+}
+
 /* Eco-Pledge Checkbox */
 .pledge-container {
   margin-bottom: 2rem;
@@ -2234,6 +2636,38 @@ body {
     flex-direction: column;
     text-align: center;
     gap: 0.5rem;
+  }
+}
+
+/* Accessibility: Reduced Motion Fallback */
+@media (prefers-reduced-motion: reduce) {
+  .hero-scroll-track {
+    height: auto;
+  }
+  .hero-sticky-viewport {
+    position: relative;
+    height: auto;
+    min-height: 80vh;
+  }
+  .hero-3d-overlay {
+    position: relative;
+    padding: 4rem 1rem;
+  }
+  .hero-scroll-stage {
+    position: relative;
+    opacity: 1 !important;
+    transform: none !important;
+    margin: 2rem auto;
+  }
+  .three-hero-canvas {
+    display: none !important;
+  }
+  .three-fallback {
+    display: block !important;
+  }
+  .scroll-begin-prompt,
+  .hero-hud-progress {
+    display: none !important;
   }
 }
 
