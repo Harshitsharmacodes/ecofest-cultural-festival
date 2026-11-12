@@ -164,3 +164,14 @@ If the judges ask: *"How would you connect this to a backend database in product
 
 ### Q4: *"What is unique about your schedule design compared to standard festival websites?"*
 > **Answer:** *"Standard websites either show a static image or a flat list where overlapping events get lost. Our website features an **Adaptive Multi-Track Venue Matrix**. It algorithmically groups events by time slot, detects concurrency, and renders simultaneous events into distinct venue-colored parallel tracks using CSS Grid auto-fit columns. Visitors see every concurrent option at a glance with zero overlap."*
+
+### Q5: *"How does the 3D Scroll-Driven Tree hero work under the hood without hurting performance?"*
+> **Answer:** *"We built a 400vh scroll track orchestrated by GSAP ScrollTrigger tied to a Three.js WebGL scene. As the user scrolls from 0% to 100%, scroll progress drives the scale and transformation of a procedurally generated tree: a glowing seed expands into an organic trunk, branches split outwards using golden-ratio angles, and thousands of luminous foliage blossoms open up. To guarantee 60fps even on mobile devices:
+> 1. We cap the device pixel ratio to 2.0.
+> 2. Particle count is scaled down from 160 to 70 on mobile screens.
+> 3. We use an `IntersectionObserver` that completely suspends the Three.js `requestAnimationFrame` loop when the user scrolls past the hero section, saving GPU and battery.
+> 4. We check `prefers-reduced-motion` and WebGL availability to render a static enchanted forest fallback for accessibility."*
+
+### Q6: *"How does the Quick Register feature handle venue and schedule metadata?"*
+> **Answer:** *"Clicking 'Quick Register' on any event card triggers `handleQuickRegistration(eventId)`, which performs an $O(1)$ lookup in our indexed event dictionary. It auto-populates the registration dropdown, smoothly scrolls to the form, and renders an active event preview card displaying the event's category, scheduled day and time, and venue name with a map pin icon. When the form is submitted, these exact venue and time details are dynamically bound to the generated digital ticket pass."*
+
