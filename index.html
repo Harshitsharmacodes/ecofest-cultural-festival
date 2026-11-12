@@ -16,6 +16,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
+  <!-- 3D Enchanted Forest Intro + Scroll Journey (Drop-in Zero-Build) -->
+  <script src="ecofest-3d.js" defer></script>
+
   <!-- Stylesheet -->
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -56,75 +59,23 @@
   </header>
 
   <main>
-    <!-- SCROLL-DRIVEN 3D HERO EXPERIENCE (400vh Track with Three.js & GSAP ScrollTrigger) -->
-    <div class="hero-scroll-track" id="hero">
-      <div class="hero-sticky-viewport" id="heroStickyViewport">
-        <!-- Three.js WebGL 3D Canvas -->
-        <canvas id="threeHeroCanvas" class="three-hero-canvas" aria-label="3D Enchanted Sacred Tree Experience"></canvas>
+    <!-- HERO SECTION -->
+    <section class="hero-section" id="hero">
+      <div class="section-container hero-content">
+        <div class="hero-badge">
+          <span class="pulse-dot" aria-hidden="true"></span>
+          <span>Samrat Ashok Technological Institute (SATI) Presents</span>
+        </div>
         
-        <!-- WebGL Graceful Fallback Container -->
-        <div id="threeWebGlFallback" class="three-fallback hidden" aria-hidden="true">
-          <div class="fallback-glow-tree"></div>
-        </div>
+        <h1 class="hero-title">
+          Where Culture Blooms in <span class="highlight-text">Enchanted Nature</span>
+        </h1>
+        
+        <p class="hero-tagline">
+          Nov 14 – 16, 2026 · The Whispering Banyan Grove · 100% Zero Single-Use Plastic
+        </p>
 
-        <!-- 3D Scroll Stages Overlay -->
-        <div class="hero-3d-overlay" id="hero3dOverlay">
-          
-          <!-- Stage 1: Scroll 0-25% (Dark misty forest, College name presents, glowing seed) -->
-          <div class="hero-scroll-stage stage-1" id="stage1Intro">
-            <span class="college-sub-title" id="collegeSubTitle">[YOUR COLLEGE NAME] Presents</span>
-            <h2 class="mystic-tagline">The Awakening of the Sacred Grove</h2>
-            <div class="stage-seed-indicator">
-              <span class="seed-aura" aria-hidden="true"></span>
-              <span class="seed-caption">A glowing seed awaits your scroll...</span>
-            </div>
-          </div>
-
-          <!-- Stage 2: Scroll 25-60% (Procedural tree sprouting & growing) -->
-          <div class="hero-scroll-stage stage-2" id="stage2Growth">
-            <div class="growth-status-pill">
-              <span class="pulse-leaf" aria-hidden="true">🌱</span>
-              <span>Roots Deepen • The Ancient Tree Grows</span>
-            </div>
-            <p class="growth-subtext">Scroll to witness branches bifurcate and bioluminescent blossoms bloom</p>
-          </div>
-
-          <!-- Stage 3: Scroll 60-85% (Canopy light explosion, ECOFEST 2026 title reveal, firefly vortex) -->
-          <div class="hero-scroll-stage stage-3" id="stage3Climax">
-            <div class="climax-badge">Annual Inter-College Cultural Celebration</div>
-            <h1 class="climax-title">
-              ECOFEST <span class="year-emerald">2026</span>
-            </h1>
-            <p class="climax-subtitle">Where Culture Blooms in <span class="highlight-text">Enchanted Nature</span></p>
-            <div class="climax-info-chip">
-              <span>📅 Nov 14 – 16, 2026</span>
-              <span class="chip-sep">•</span>
-              <span>📍 The Whispering Banyan Grove</span>
-            </div>
-          </div>
-
-          <!-- Scroll Prompts & Progress Tracker -->
-          <div class="scroll-begin-prompt" id="scrollBeginPrompt">
-            <div class="scroll-mouse-glyph" aria-hidden="true">
-              <div class="scroll-wheel-dot"></div>
-            </div>
-            <span class="scroll-prompt-label">Scroll to grow tree ↓</span>
-          </div>
-
-          <!-- Floating HUD Progress Indicator -->
-          <div class="hero-hud-progress" id="heroHudProgress" aria-hidden="true">
-            <div class="hud-bar-track">
-              <div class="hud-bar-fill" id="hudProgressFill"></div>
-            </div>
-            <span class="hud-progress-val" id="hudProgressVal">0%</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Festival Overview Portal (Connects 3D Hero smoothly into Main Content) -->
-    <section class="festival-portal-section" id="portalOverview">
-      <div class="section-container">
+        <!-- Quick Meta Details -->
         <div class="festival-dates-card">
           <div class="date-item">
             <span class="date-icon" aria-hidden="true">📅</span>
@@ -162,26 +113,6 @@
           <a href="#registration" class="btn btn-primary" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);">
             <span>Claim Free EcoPass ✨</span>
           </a>
-        </div>
-
-        <!-- Festival Impact Counters -->
-        <div class="hero-stats-grid">
-          <div class="stat-card">
-            <span class="stat-number">3</span>
-            <span class="stat-label">Enchanted Days</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-number">18+</span>
-            <span class="stat-label">Curated Events</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-number">1,500+</span>
-            <span class="stat-label">Saplings Planted</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-number">₹1.5L</span>
-            <span class="stat-label">Green Prize Pool</span>
-          </div>
         </div>
       </div>
     </section>

@@ -351,8 +351,21 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   5. Scroll-Driven 3D Hero Experience (Three.js & GSAP ScrollTrigger)
+   5. Hero Section (#hero)
    -------------------------------------------------------------------------- */
+.hero-section {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 130px 24px 80px;
+  background: radial-gradient(circle at 50% 35%, rgba(15, 58, 40, 0.55), var(--bg-deep-forest, #04120d));
+  overflow: hidden;
+}
+
 .hero-scroll-track {
   position: relative;
   height: 400vh;

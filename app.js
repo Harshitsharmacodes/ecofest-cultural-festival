@@ -14,10 +14,10 @@
    Easily customize college name, festival title, dates, colors, and timings
    ============================================================================== */
 const ECOFEST_CONFIG = {
-  // Replace with your actual college name (e.g., "Greenwood Institute of Technology")
-  collegeName: "Greenwood University",
+  // Samrat Ashok Technological Institute (SATI)
+  collegeName: "Samrat Ashok Technological Institute (SATI)",
   festivalName: "ECOFEST 2026",
-  tagline: "Where Culture Blooms in Harmony with Enchanted Nature",
+  tagline: "Where Culture Blooms in Enchanted Nature",
   dates: "Nov 14 – 16, 2026",
   venue: "The Whispering Banyan Grove",
   colors: {
@@ -230,6 +230,7 @@ const ECOFEST_EVENTS = [
 class Scroll3DHero {
   constructor() {
     this.canvas = document.getElementById('threeHeroCanvas');
+    if (!this.canvas) return; // Exit gracefully if ecofest-3d is powering the hero journey
     this.fallback = document.getElementById('threeWebGlFallback');
     this.track = document.getElementById('hero');
     this.stages = {
